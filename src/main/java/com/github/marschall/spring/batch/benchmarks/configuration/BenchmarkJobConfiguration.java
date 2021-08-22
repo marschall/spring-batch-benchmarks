@@ -39,7 +39,6 @@ public class BenchmarkJobConfiguration {
   @Bean
   public Step partionedBenchmarkStep() {
     return this.stepBuilderFactory.get("partionedBenchmarkStep")
-//            .partitioner(this.benchmarkStep())
             .partitioner("benchmarkStep", new SimplePartitioner())
             .step(this.benchmarkStep())
             .gridSize(5_000)

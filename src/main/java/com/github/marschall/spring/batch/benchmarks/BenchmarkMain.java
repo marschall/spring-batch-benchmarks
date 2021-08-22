@@ -8,20 +8,9 @@ import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
 
-public class Main {
+public class BenchmarkMain {
 
   public static void main(String[] args) throws RunnerException, IOException, Exception {
-//    Class<?> configurationClass = null;
-//    configurationClass = InMemoryConfiguration.class;
-//    configurationClass = NullConfiguration.class;
-//    configurationClass = MapConfiguration.class;
-//    configurationClass = H2Configuration.class;
-//    AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext(configurationClass);
-//    JobLauncher jobLauncher = applicationContext.getBean(JobLauncher.class);
-//    Job job = applicationContext.getBean("benchmarkJob", Job.class);
-//    JobParameters jobParameters = new JobParameters();
-//    jobLauncher.run(job, jobParameters);
-
     Options options = new OptionsBuilder()
         .include("com\\.github\\.marschall\\.spring\\.batch\\.benchmarks\\..*Benchmarks")
         .forks(1)

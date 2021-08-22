@@ -1,7 +1,7 @@
 package com.github.marschall.spring.batch.benchmarks;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
-import static org.openjdk.jmh.annotations.Mode.Throughput;
+import static org.openjdk.jmh.annotations.Mode.AverageTime;
 import static org.openjdk.jmh.annotations.Scope.Benchmark;
 
 import org.openjdk.jmh.annotations.Benchmark;
@@ -24,7 +24,7 @@ import com.github.marschall.spring.batch.benchmarks.configuration.MapConfigurati
 import com.github.marschall.spring.batch.benchmarks.configuration.NullConfiguration;
 
 
-@BenchmarkMode(Throughput)
+@BenchmarkMode(AverageTime)
 @OutputTimeUnit(MILLISECONDS)
 @State(Benchmark)
 public class RepositoryBenchmarks {
@@ -73,7 +73,6 @@ public class RepositoryBenchmarks {
   public void doTearDown() {
     this.applicationContext.close();
   }
-
 
   @Benchmark
   public JobExecution launchJobH2() throws JobExecutionException {
