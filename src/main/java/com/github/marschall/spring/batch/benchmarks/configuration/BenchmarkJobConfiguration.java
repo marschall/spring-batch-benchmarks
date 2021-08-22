@@ -7,6 +7,7 @@ import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
+import org.springframework.batch.core.partition.support.SimplePartitioner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +17,8 @@ import com.github.marschall.spring.batch.benchmarks.batch.NullIntegerItemStreamW
 
 @Configuration
 public class BenchmarkJobConfiguration {
+
+  private static final int PARTITION_COUNT = 5_000;
 
   private static final int CHUNK_SIZE = 10;
 
@@ -29,15 +32,25 @@ public class BenchmarkJobConfiguration {
   public Job benchmarkJob() {
     return this.jobBuilderFactory.get("benchmarkJob")
       .incrementer(new RunIdIncrementer())
-      .start(this.benchmarkStep())
+      .start(this.partionedBenchmarkStep())
       .build();
+  }
+
+  @Bean
+  public Step partionedBenchmarkStep() {
+    return this.stepBuilderFactory.get("partionedBenchmarkStep")
+//            .partitioner(this.benchmarkStep())
+            .partitioner("benchmarkStep", new SimplePartitioner())
+            .step(this.benchmarkStep())
+            .gridSize(5_000)
+            .build();
   }
 
   @Bean
   public Step benchmarkStep() {
     return this.stepBuilderFactory.get("benchmarkStep")
-      .<Integer, Integer>chunk(10)
-      .reader(new IntegerStreamItemReader(0, 5_000 * CHUNK_SIZE))
+      .<Integer, Integer>chunk(CHUNK_SIZE)
+      .reader(new IntegerStreamItemReader(0, PARTITION_COUNT * CHUNK_SIZE))
       .processor(Function.identity())
       .writer(new NullIntegerItemStreamWriter())
       .build();

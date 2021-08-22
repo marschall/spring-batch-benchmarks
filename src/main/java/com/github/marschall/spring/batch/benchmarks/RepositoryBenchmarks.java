@@ -12,6 +12,7 @@ import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.TearDown;
 import org.springframework.batch.core.Job;
+import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobExecutionException;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.launch.JobLauncher;
@@ -20,6 +21,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import com.github.marschall.spring.batch.benchmarks.configuration.H2Configuration;
 import com.github.marschall.spring.batch.benchmarks.configuration.InMemoryConfiguration;
 import com.github.marschall.spring.batch.benchmarks.configuration.MapConfiguration;
+import com.github.marschall.spring.batch.benchmarks.configuration.NullConfiguration;
 
 
 @BenchmarkMode(Throughput)
@@ -33,7 +35,9 @@ public class RepositoryBenchmarks {
 
   private static final String REPOSITORY_TYPE_H2 = "h2";
 
-  @Param({REPOSITORY_TYPE_H2, REPOSITORY_TYPE_MAP, REPOSITORY_TYPE_IN_MEMORY})
+  private static final String REPOSITORY_TYPE_NULL = "null";
+
+  @Param({REPOSITORY_TYPE_H2, REPOSITORY_TYPE_IN_MEMORY, REPOSITORY_TYPE_NULL})
   String repositoryType;
 
   private AnnotationConfigApplicationContext applicationContext;
@@ -48,6 +52,9 @@ public class RepositoryBenchmarks {
     switch (this.repositoryType) {
       case REPOSITORY_TYPE_IN_MEMORY:
         configurationClass = InMemoryConfiguration.class;
+        break;
+      case REPOSITORY_TYPE_NULL:
+        configurationClass = NullConfiguration.class;
         break;
       case REPOSITORY_TYPE_MAP:
         configurationClass = MapConfiguration.class;
@@ -69,7 +76,7 @@ public class RepositoryBenchmarks {
 
 
   @Benchmark
-  public org.springframework.batch.core.JobExecution launchJobH2() throws JobExecutionException {
+  public JobExecution launchJobH2() throws JobExecutionException {
     return this.jobLauncher.run(this.job, this.jobParameters);
   }
 
