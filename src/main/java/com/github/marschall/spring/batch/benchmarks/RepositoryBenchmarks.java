@@ -75,7 +75,7 @@ public class RepositoryBenchmarks {
   }
 
   @Benchmark
-  public JobExecution launchJobH2() throws JobExecutionException {
+  public JobExecution launchJob() throws JobExecutionException {
     return this.jobLauncher.run(this.job, this.jobParameters);
   }
 
