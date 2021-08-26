@@ -18,7 +18,9 @@ import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
+import com.github.marschall.spring.batch.benchmarks.configuration.DerbyConfiguration;
 import com.github.marschall.spring.batch.benchmarks.configuration.H2Configuration;
+import com.github.marschall.spring.batch.benchmarks.configuration.HsqlConfiguration;
 import com.github.marschall.spring.batch.benchmarks.configuration.InMemoryConfiguration;
 import com.github.marschall.spring.batch.benchmarks.configuration.MapConfiguration;
 import com.github.marschall.spring.batch.benchmarks.configuration.NullConfiguration;
@@ -35,9 +37,13 @@ public class RepositoryBenchmarks {
 
   private static final String REPOSITORY_TYPE_H2 = "h2";
 
+  private static final String REPOSITORY_TYPE_HSQL = "hsql";
+
+  private static final String REPOSITORY_TYPE_DERBY = "derby";
+
   private static final String REPOSITORY_TYPE_NULL = "null";
 
-  @Param({REPOSITORY_TYPE_H2, REPOSITORY_TYPE_IN_MEMORY, REPOSITORY_TYPE_NULL})
+  @Param({REPOSITORY_TYPE_H2, REPOSITORY_TYPE_HSQL, REPOSITORY_TYPE_DERBY, REPOSITORY_TYPE_IN_MEMORY, REPOSITORY_TYPE_NULL})
   String repositoryType;
 
   private AnnotationConfigApplicationContext applicationContext;
@@ -61,6 +67,12 @@ public class RepositoryBenchmarks {
         break;
       case REPOSITORY_TYPE_H2:
         configurationClass = H2Configuration.class;
+        break;
+      case REPOSITORY_TYPE_HSQL:
+        configurationClass = HsqlConfiguration.class;
+        break;
+      case REPOSITORY_TYPE_DERBY:
+        configurationClass = DerbyConfiguration.class;
         break;
     }
     this.applicationContext = new AnnotationConfigApplicationContext(configurationClass);
