@@ -15,6 +15,7 @@ import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobExecutionException;
 import org.springframework.batch.core.JobParameters;
+import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -49,8 +50,7 @@ public class RepositoryBenchmarks {
   private AnnotationConfigApplicationContext applicationContext;
   private JobLauncher jobLauncher;
   private Job job;
-
-  private JobParameters jobParameters;
+  private long jobId;
 
   @Setup
   public void doSetup() {
@@ -78,7 +78,7 @@ public class RepositoryBenchmarks {
     this.applicationContext = new AnnotationConfigApplicationContext(configurationClass);
     this.jobLauncher = this.applicationContext.getBean(JobLauncher.class);
     this.job = this.applicationContext.getBean("benchmarkJob", Job.class);
-    this.jobParameters = new JobParameters();
+    this.jobId = 1L;
   }
 
   @TearDown
@@ -88,7 +88,10 @@ public class RepositoryBenchmarks {
 
   @Benchmark
   public JobExecution launchJob() throws JobExecutionException {
-    return this.jobLauncher.run(this.job, this.jobParameters);
+    JobParameters jobParameters = new JobParametersBuilder()
+        .addLong("key", this.jobId++)
+        .toJobParameters();
+    return this.jobLauncher.run(this.job, jobParameters);
   }
 
 }
