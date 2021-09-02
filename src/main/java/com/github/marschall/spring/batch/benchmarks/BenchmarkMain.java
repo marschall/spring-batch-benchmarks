@@ -12,13 +12,12 @@ public class BenchmarkMain {
 
   public static void main(String[] args) throws RunnerException, IOException, Exception {
     Options options = new OptionsBuilder()
-//        .include("com\\.github\\.marschall\\.spring\\.batch\\.benchmarks\\..*Benchmarks")
-        .include("com\\.github\\.marschall\\.spring\\.batch\\.benchmarks\\.JobKeyGeneratorBenchmarks")
+        .include("com\\.github\\.marschall\\.spring\\.batch\\.benchmarks\\..*Benchmarks")
         .forks(1)
         .warmupIterations(3)
         .measurementIterations(5)
         .resultFormat(ResultFormatType.CSV)
-        //.addProfiler("gc")
+//        .addProfiler("gc")
         .addProfiler("jfr", "debugNonSafePoints=true")
         .build();
     new Runner(options).run();
