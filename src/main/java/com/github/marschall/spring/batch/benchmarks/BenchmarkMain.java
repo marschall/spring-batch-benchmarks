@@ -1,8 +1,9 @@
 package com.github.marschall.spring.batch.benchmarks;
 
+import static org.openjdk.jmh.results.format.ResultFormatType.TEXT;
+
 import java.io.IOException;
 
-import org.openjdk.jmh.results.format.ResultFormatType;
 import org.openjdk.jmh.runner.Runner;
 import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
@@ -16,7 +17,7 @@ public class BenchmarkMain {
         .forks(1)
         .warmupIterations(3)
         .measurementIterations(5)
-        .resultFormat(ResultFormatType.CSV)
+        .resultFormat(TEXT)
 //        .addProfiler("gc")
         .addProfiler("jfr", "debugNonSafePoints=true")
         .build();
